@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+# GPLv3
+# Author: tryggvi@ok.is
+##########
+#
+# With this tool you can easily create objects for RIPE database
+#
+# Example:
+#	Create records for 10.1.1.1 - 10.1.1.1 and 10.1.2.0 - 10.1.2.2555
+#
+#	ripe-generate.pl 10.1.1.1,10.1.2.0-10.1.2.255
+#
+
+use strict;
+
+#
+my $netname = "MYNETNAME";
+my $descr = "My description";
+my $admin = "SOMENIC-RIPE";
+
+#
+my $changed = "user\@example.com";
+my $mnt_by = "MNT-EXAMPLE";
+my $country = "IS";
+my $status = "ASSIGNED PA";
+
+### Do not edit below ###
+my $input = shift;
+
+my @ips = split(",", $input);
+
+foreach(@ips){
+	print "\n";
+	my ($from, $to) = split("-", $_);
+	if(!$to){
+		$to = $from;
+	}
+
+print <<EOF
+INETNUM:         $from - $to
+NETNAME:         $netname
+DESCR:           $descr
+COUNTRY:         $country
+ADMIN-C:         $admin
+TECH-C:          $admin
+STATUS:          $status
+MNT-BY:          $mnt_by
+CHANGED:         $changed
+SOURCE:          RIPE
+
+EOF
+}
